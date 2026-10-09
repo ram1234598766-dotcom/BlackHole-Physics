@@ -1040,6 +1040,38 @@ def appendix_b(d):
            "(max deviation 5.6e-16).  Entanglement creation is checked by "
            "confirming that a product state |000> acquires subsystem entropy "
            "under a random unitary.")
+    d.heading("B.4  Verification of the PDF itself", 2)
+    d.para("A hand-written PDF writer is a liability, so the output is audited "
+           "rather than trusted.  Two independent checkers ship with the "
+           "code: `paper/verify_pdf.py` checks the file structure (xref "
+           "offsets, object count, MediaBox, text extraction, no character "
+           "transliterated to '?'), and `paper/audit_pdf.py` checks the "
+           "rendering.  The rendering audit does four things:")
+    d.para("1.  it compares every glyph width used by the typesetter against "
+           "the authoritative Adobe AFM files for Helvetica, Helvetica-Bold, "
+           "Helvetica-Oblique, Helvetica-BoldOblique, Courier and Courier-Bold "
+           "- all 95 printable ASCII glyphs of all six fonts match exactly, "
+           "which is what makes word wrapping and right-edge fitting correct;")
+    d.para("2.  it walks each page's content stream with the same text state "
+           "machine a viewer uses (font, size, rise, text matrix) and "
+           "reconstructs the bounding box of every one of the ~8,000 text "
+           "runs from those widths;")
+    d.para("3.  it flags any run crossing the text margins, any run outside "
+           "the page, and any two runs that overlap - i.e. text printed on "
+           "top of text;")
+    d.para("4.  it checks that super/subscript rises are reset and that the "
+           "graphics state is balanced (one `q ... re W n` per figure, closed "
+           "by `Q`).")
+    d.para("The current output passes all of these: 0 overflowing runs, 0 "
+           "off-page runs, 0 overlapping runs on all 20 pages, all six font "
+           "tables exact.  This audit also caught a genuine bug: centred "
+           "paragraphs were being positioned around the left margin rather "
+           "than the centre of the text box, so the title on the title page "
+           "ran off the left edge of the page.  Alignment is now applied per "
+           "line and the defect is gone.  It is recorded here because a PDF "
+           "that is merely well-formed is not the same as a PDF that is "
+           "correctly rendered.")
+
     d.para("Two bugs were found and fixed during this work, and both are "
            "reported because they are the reason the validation step exists. "
            "First, a phase generator drew two independent random numbers for "

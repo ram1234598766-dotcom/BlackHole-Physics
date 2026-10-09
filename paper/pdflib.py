@@ -57,6 +57,15 @@ _HELVB = {
 }
 _COUR = {c: 600 for c in _HELV}
 
+FONT_STYLE_BY_ID = {fid: name for name, (fid, _b) in {
+    'body': ('F1', 'Helvetica'),
+    'bodyi': ('F2', 'Helvetica-Oblique'),
+    'bold': ('F3', 'Helvetica-Bold'),
+    'boldi': ('F4', 'Helvetica-BoldOblique'),
+    'mono': ('F5', 'Courier'),
+    'monob': ('F6', 'Courier-Bold'),
+}.items()}
+
 FONTS = {
     'body':       ('F1', 'Helvetica'),
     'bodyi':      ('F2', 'Helvetica-Oblique'),
@@ -311,7 +320,18 @@ class Doc:
 
     def para(self, text, size=9.5, style='body', indent=0, leading=13.2,
              space_after=6.0, color=None, align='left', width_frac=1.0):
-        """Flow a paragraph, wrapping on the available width."""
+        """Flow a paragraph, wrapping on the available width.
+
+        ``text`` may contain embedded newlines, each of which starts a new
+        paragraph block with the same alignment.
+        """
+        for block in text.split('\n'):
+            self._para_block(block, size, style, indent, leading, color,
+                             align, width_frac)
+        self.y -= space_after
+
+    def _para_block(self, text, size, style, indent, leading, color,
+                    align, width_frac):
         avail = (self.PAGE_W - self.MARGIN_L - self.MARGIN_R - indent) * width_frac
         runs = [Run(t, st, size, sc) for (t, st, sz, sc) in parse_markup(text)]
         if style != 'body':
@@ -321,7 +341,6 @@ class Doc:
         line_w = 0.0
         lines = []
         for r in runs:
-            # split on spaces so that wrapping can happen
             words = r.text.split(' ')
             for k, word in enumerate(words):
                 piece = word + (' ' if k < len(words) - 1 else '')
@@ -332,25 +351,24 @@ class Doc:
                     lines.append((line, line_w))
                     line, line_w = [], 0.0
                 sub = Run(piece, r.style, r.size, r.script)
-                # measure without the trailing space for the fit test
-                if piece.endswith(' '):
-                    sub.width = run_width(piece, sub.style, sub.size)
+                sub.width = run_width(piece, sub.style, sub.size)
                 line.append(sub)
                 line_w += sub.width
         if line:
             lines.append((line, line_w))
-        first = True
+        box_x = self.MARGIN_L + indent
         for ln, lw in lines:
-            need = leading
-            if self._space_left() < need:
+            if self._space_left() < leading:
                 self.page_break()
-            if first:
-                first = False
-            x = self.MARGIN_L + indent
+            if align == 'center':
+                x = box_x + avail / 2.0
+            elif align == 'right':
+                x = box_x + avail
+            else:
+                x = box_x
             self._emit_text(x, self.y - size, ln, size, color=color,
-                            align=align if len(lines) == 1 else 'left')
+                            align=align)
             self.y -= leading
-        self.y -= space_after
 
     def heading(self, text, level=1, number=None):
         size = {0: 19, 1: 13.5, 2: 11.5, 3: 10.2}[level]
