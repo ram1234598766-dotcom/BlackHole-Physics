@@ -24,8 +24,10 @@
 11. Falsifiers
 12. Open problems
 13. Research program
-14. References
-15. Glossary
+14. Simulation setup (how to run the tests)
+15. References
+16. Simulation results
+17. Glossary
 
 ---
 
@@ -41,7 +43,7 @@ Partitionism is an attempt to write that life cycle in a single language. It is 
 
 Everything else in this document is a consequence, and every consequence is labelled: `[ESTABLISHED]` (real physics with references), `[BORROWED]` (real idea used here as input), `[CONJECTURE]` (Partitionism's claim), `[PREDICTION]` (a commitment that can fail).
 
-A crucial disclaimer: **no grand theory of quantum gravity has been established**, and this document does not establish one. What it does is (a) state precisely where the standard framework fails, (b) propose an axiom set from which those failures are addressed by a single mechanism, and (c) commit to falsifiable signatures. Section 10 is a literature audit that states, claim by claim, what is genuinely new here and what is not. I have searched for each claim; I cannot guarantee that no one has ever published an equivalent statement, and Section 10 says so.
+A crucial disclaimer: **no grand theory of quantum gravity has been established**, and this document does not establish one. What it does is (a) state precisely where the standard framework fails, (b) propose an axiom set from which those failures are addressed by a single mechanism, (c) implement and numerically test the mechanism (§15), and (d) commit to falsifiable signatures. Section 10 is a literature audit that states, claim by claim, what is genuinely new here and what is not. I searched for each claim twice; the audit withdrew three claims of mine that turned out to be published, and says so. I cannot guarantee that no one has ever published an equivalent statement, and Section 10 says that too. Section 14 lists the code; §15 reports the numbers.
 
 ---
 
@@ -315,7 +317,18 @@ The out-fall entropy rises not smoothly but in steps of one logical qubit per ar
 
   ΔS_O = k_B ln 2 per ΔA = 8πγℓ_P², i.e. N_steps = A/ΔA over the hole's life.
 
-Magnitude of the correction to the smooth Page curve: ε = O(ΔA/A) ~ 10⁻⁴⁰ for a stellar-mass hole — unobservable in astrophysics. Adjacent to (and partially shared with) the quantized-area literature in loop quantum gravity: Sahlmann (PRD 76 (2007) 104050) found that the LQG horizon entropy likewise increases in discrete steps as a function of area. **What is claimed new** is not the discreteness of area, but the *time-domain* signature: the entropy of the outgoing radiation should rise in discrete increments, with the increments tied to the interface's code distance.
+Magnitude: the Page time can move by at most **half a quantum**, which in time is
+Δt/t = (3/4)/N with N = A/ΔA the number of area quanta (§15.2).  For a
+Planck-mass hole N ≈ 18, so its Page curve is a tent of about eighteen steps and
+its Page time is misplaced by ~4 %; for a solar-mass hole N ≈ 1.5 × 10⁷⁷ and
+Δt/t ≈ 5 × 10⁻⁷⁸.  Adjacent to (and partially shared with) the
+quantized-area literature: Sahlmann (PRD 76 (2007) 104050) found that the LQG
+horizon entropy likewise increases in discrete steps as a function of area, and
+discrete/multi-step Page curves have since been proposed with other mechanisms
+(§10).  **What is claimed new** is not the discreteness of area, but the
+*time-domain* signature — the entropy of the outgoing radiation rising in
+increments tied to the interface's code distance — and the specific
+half-quantum bound on the Page-time shift.
 
 **Where to look:** not astrophysics. Analog horizons, where the analog Planck scale is set by a healing length rather than by ℓ_P (see P3).
 
@@ -328,7 +341,17 @@ If T_H is a linewidth, then the emitted power is not exactly the Planckian conti
 Partitionism's corrections are suppressed by (ℓ_P/R)² and are therefore unobservable for astrophysical black holes at any foreseeable sensitivity. This is a *feature*, not a hedge: the framework is betting that the same physics appears at the analog Planck scale of tabletop horizons, where the suppression is (ξ/R)² and can be engineered to be large. A resolved line structure, or a resolved staircase, in an analog Hawking spectrum that is not explained by the condensate's own dispersion relation would be the first real evidence for a quantized interface. Absence of any such structure in a system built to look for it would be the first real evidence against.
 
 ### P4 — The hair count is finite and computable `[PREDICTION]`
-The number of distinguishable interface states is N = A/ΔA with ΔA = 8πγℓ_P², γ ≈ 0.24–0.27 depending on convention. For a solar-mass hole N ≈ 10⁷⁷. This is a *counting* statement, testable in principle against the entropy budget of the universe (Egan–Lineweaver) rather than against a single object.
+The number of distinguishable interface states is N = A/ΔA.  Partitionism adopts
+the **published** spacing that gives exactly one bit of entropy per quantum,
+ΔA = 4 ln 2 ℓ_P² (Bekenstein–Mukhanov-type evenly spaced spectrum; Landauer
+saturation — see §10, this is *not* a claim of this framework).  For a
+solar-mass hole N ≈ 1.5 × 10⁷⁷, for Sgr A* N ≈ 2.8 × 10⁹⁰, and for a
+Planck-mass endpoint N ≈ 18.  Expressed in the loop-quantum-gravity convention
+ΔA = 8πγℓ_P² this corresponds to γ = ln 2/(2π) ≈ 0.110, which differs from the
+values usually quoted in that literature (γ ≈ 0.274 in arXiv:2001.03440;
+γ₀ = ln 2/(π√3) ≈ 0.127 in the SU(2) counting).  That discrepancy is a real,
+pre-existing tension between the two quantized-area programmes, and it is a
+sharp way to test which one nature uses — but it is not a new discovery.
 
 ### P5 — No firewall, ever, at any energy `[PREDICTION]`
 The infalling observer's reconstruction fidelity is bounded below 1 but strictly positive at all times, including after the Page time. Any experiment (thought or analog) that detects a high-energy membrane at a horizon falsifies the framework outright.
@@ -347,21 +370,31 @@ Since S_obs ≈ 3.1 × 10¹⁰⁴ k_B is dominated by supermassive black holes (
 | Metric = second derivative / Hessian of entanglement entropy | Matsueda arXiv:1408.5589, arXiv:1408.6633; kinematic-space/Crofton constructions; Jacobson PRL 75 (1995) 1260; Verlinde arXiv:1001.0785 | **NOT NEW** — used as borrowed input (§5.2) |
 | Entanglement entropy bounds the entropy of a region | Bekenstein PRD 23 (1981) 287; covariant holographic bound (Bousso, JHEP 07 (1999) 004) | **NOT NEW** — established |
 | Unitary Page curve from quantum extremal surfaces | Penington arXiv:1905.08255; AEMM arXiv:1905.08762; AHMST arXiv:1911.12333; PSSY arXiv:1911.11977 | **NOT NEW** — established in AdS/CFT |
+| **The Page curve as "the minimum of the two subsystems' capacities"** | **This is Page's own 1993 derivation** — see the explicit statement S_B = S_R = min(S̄_B, S̄_R), S̄ = log d, in e.g. arXiv:2002.05734 and the expository arXiv:2505.23011. My §15.1 simulation *verifies* it; it does not derive it | **NOT NEW** — I initially claimed this and withdraw the claim. Test 1 reproduces it |
+| Quantum simulation of horizon evaporation and its Page curve | Brádler & Adami arXiv:1505.02840 (decoupling model); quantum-computer simulations of the Page curve (Nuclear Physics, 2025) | **NOT NEW** — adjacent technique; my simulation is a verification |
+| **One bit of entropy per area quantum, ΔA = 4 ln 2 ℓ_P²** | **Bekenstein–Mukhanov-style evenly spaced spectrum with Landauer saturation: Bagchi, Ghosh & Sen, Gen. Relativ. Gravit. 56, 108 (2024), arXiv:2408.02077; Neto & Thibes, arXiv:2605.26386 (accepted, Phys. Lett. B)** | **NOT NEW** — claimed in v1 of this document, withdrawn. The framework *adopts* it. In the LQG convention ΔA = 8πγℓ_P² it corresponds to γ = ln 2/(2π) ≈ 0.110, which differs from the LQG values γ ≈ 0.274 (arXiv:2001.03440) and γ₀ = ln 2/(π√3) ≈ 0.127 — a real, pre-existing tension, not a new result |
 | Area quantisation, quantized entropy steps | Rovelli PRL 56 (1996) 3311; Sahlmann PRD 76 (2007) 104050 | **NOT NEW** — borrowed |
+| Area quantisation as a source of echoes / temperature corrections | Datta & Phukon PRD 104 (2021) 124062; echoes and area quantization, CQG 39 (2022) 045007; Dreyer arXiv:gr-qc/0211076; arXiv:2407.08358 | **NOT NEW** — adjacent, and prior |
+| Discrete / multi-step Page curves | Stratified interiors and time-resolved Page curves (Int. J. Theor. Phys., 2025); quantized evaporation time, arXiv:2601.05305; algebraic description of the Page transition, JHEP 04 (2026) 160 | **ADJACENT** — closest prior art for my staircase, with different mechanisms |
 | Soft / supertranslation hair | HPS PRL 116 (2016) 231301; Haco et al. JHEP 12 (2018) 098; Strominger JHEP 02 (1998) 009 | **NOT NEW** — adjacent |
 | Planck-star bounce, white-hole tunnelling | Rovelli–Vidotto arXiv:1401.6562; Haggard–Rovelli arXiv:1407.0989; Barrau–Rovelli Phys. Lett. B 739 (2014) 405 | **NOT NEW** — adjacent |
 | Distinctions / partitions as a foundational language | Ellerman, *The Logic of Partitions* (Rev. Symb. Logic 3 (2010) 287) and arXiv:2208.00384; Rovelli's relational "partitions of nature" (arXiv:2201.00907); Lee's Hilbert-space decompositions (JHEP 2020) | **ADJACENT** — see note below |
 | **Cuts as the graded primitive, with an entropy function on cuts, and *geometry as its readout*** | the individual ingredients exist; the combination does not | **CLAIMED NEW** (as a postulate set) |
 | **Conjecture R: singularities are degeneracies of the readout map (Hessian non-invertibility), with a finite substrate invariant replacing the Kretschmann scalar** | no direct prior work found | **CLAIMED NEW** (central conjecture) |
-| **The flux balance as an equation of motion, making the Page curve a bookkeeping identity** | the Page curve is known; as a *law* it is new here | **CLAIMED NEW** |
 | **The selection rule: the endpoint is decided by δA = A mod ΔA** | endpoints are proposed individually in the LQG literature | **CLAIMED NEW** |
-| **T_H as a relaxation linewidth of an interface code, with a discrete spectral structure** | QNM-like structure and non-thermal corrections are discussed in the literature; as a *postulate about the interface* it is new here | **CLAIMED NEW** |
+| **T_H as a relaxation linewidth of an interface code, with a discrete spectral structure** | QNM-based Impirzi fixing (Dreyer 2002); T_H corrections of O(m_P⁴/M³) from a quantized area (arXiv:2407.08358); echoes from area quantization | **PARTLY NEW** — the specific mechanism is new, the observable signature is not |
 | **Logical interior for one-sided, asymptotically flat holes (no boundary theory), with bounded fidelity** | AdS/CFT entanglement-wedge reconstruction (Penington; Papadodimas–Raju) | **PARTLY NEW** (new setting, same technique) |
-| **The staircase as a time-domain signature of the radiation entropy** | LQG steps in entropy vs. *area* (Sahlmann) | **PARTLY NEW** |
+| **The quantised Page-time shift Δt/t = (3/4)/N and the ~18-quantum endpoint tent** | adjacent to quantized evaporation time and multi-step Page curves as above | **PARTLY NEW** |
 
 **Note on Ellerman.** Ellerman has built an extensive and rigorous programme in which the mathematics of quantum mechanics is the mathematics of set partitions linearized to vector spaces. That programme is about *logic and information measure* — distinctions ("dits") and logical entropy. Partitionism shares the vocabulary but not the object: my primitive is a **bipartition of an information space with a specified state** (a Ryu–Takayanagi-style cut), not an equivalence relation on a set, and the claim at issue is *dynamical and gravitational*, not logical. This is a genuine distinction, and Ellerman's priority on the partition formalism itself is acknowledged.
 
-**What can honestly be said about novelty.** The ingredients are almost all in the literature, because the literature has spent fifty years generating them. What is new here is the specific postulate set, the specific mechanism by which the paradoxes are resolved (all of them by one move: distinctions are conserved, cuts flow, geometry is a readout), the two quantitative conjectures (readout degeneracy, δA selection rule), and the specific commitment to test the whole thing at the analog-horizon Planck scale rather than at the Planck length. I searched; I did not find these combined in this form. I cannot prove a negative.
+**What can honestly be said about novelty, after two rounds of searching.** The first round of searching removed two claims I had made flagrantly — the "one bit per area quantum" spacing and the derivation of the Page curve from capacity saturation — both of which turned out to be published. The second round found that even the "new" consequences (quantized Page-time shift, discrete Page curves, quantized area → echoes and temperature corrections) have close prior art. What survives as genuinely unprecedented, as far as I can determine, is narrower than the prose of §2–§7 suggests:
+
+1. **Conjecture R** — that singularities are degeneracies of a readout map, with a finite substrate invariant replacing the Kretschmann scalar, and the saturated-ball model of §15.3. No prior work found.
+2. **The endpoint selection rule** δA = A mod ΔA — no prior work found.
+3. The combination of the postulate set, and the identification of the horizon as a *saturated cut* whose hair count is A/ΔA.
+
+Everything else is either established physics, an adjacent idea, or a re-framing. I state this plainly because a framework that overstates its novelty is worthless, and because **"world-first" cannot be certified from a desk**: I searched for each claim individually and found several misses, but I cannot prove that no one anywhere has published an equivalent statement. The claims above are marked *claimed* new, not certified new.
 
 ---
 
@@ -421,7 +454,132 @@ Each item is a specific observation that would kill Partitionism.
 
 ---
 
-## 14. References
+## 14. Simulation setup
+
+The claims of §5 were implemented rather than merely asserted.  The suite is
+in `simulations/` (pure Python, standard library only) and is run with
+
+```
+python3 -m simulations.run_all
+```
+
+| test | what it checks | method |
+|---|---|---|
+| `validation.py` | that the numerics are right: Hermitian eigensolver vs. exact spectrum, bipartition identity, trace-1 reduced density matrices, block-unitary unitarity | exact comparisons |
+| `test_ledger.py` | the capacity bound, the turnover position, no duplication, and the ledger-blind monotone curve | random-unitary circuits, exact entropies, n₀ = 4–10 qubits |
+| `test_quantization.py` | the quantised Page time, the granularity of the staircase, how many area quanta real objects have | capacity counting with real constants |
+| `test_readout.py` | Conjecture R: divergence on the readout side, finiteness on the substrate side | the saturated-ball model, integrated and compared with exact values |
+
+Every random run is seeded, so the numbers in §15 are reproducible.  Two bugs
+were found and fixed in the course of this work (a broken phase generator that
+destroyed unitarity, and a non-Hermitian eigenvalue solver); both are
+described in `simulations/validation.py`'s output, section 0 of
+`simulations/RESULTS.md`.
+
+---
+
+## 15. Simulation results
+
+The framework's central claims were implemented and run numerically
+(`simulations/`, pure Python, no dependencies; reproduce with
+`python3 -m simulations.run_all`, results recorded in `simulations/RESULTS.md`).
+The numerics are validated first (Hermitian eigensolver against an exact
+spectrum, bipartition identity S(A)=S(B) to 10⁻¹⁵, reduced density matrices
+with trace 1 and no negative eigenvalues, block unitaries preserving the norm
+to 10⁻¹⁶). Two bugs were found and fixed during this work — a two-sided
+`rng.random()` call in the phase generator, which broke unitarity — which is
+the point of validating before reporting.
+
+### 15.1 The ledger and the Page curve (test 1)
+
+Random-unitary “shrinking sender” model: the collapsed matter starts in a pure
+microstate of n₀ qubits; each step applies a Haar-random unitary to everything
+still inside the horizon, then peels one qubit off into the radiation. Register
+sizes n₀ = 4, 6, 8, 10, three trials each, exact von Neumann entropies
+throughout.
+
+| n₀ | max S/ln2 | capacity bound S ≤ min(m, n₀−m) ln2 | turnover | n₀/2 |
+|---|---|---|---|---|
+| 4 | 1.3357 | violated by **0.00e+00** | 2 | 2.00 |
+| 6 | 2.3332 | **0.00e+00** | 3 | 3.00 |
+| 8 | 3.2696 | **0.00e+00** | 4 | 4.00 |
+| 10 | 4.2633 | **0.00e+00** | 5 | 5.00 |
+
+The simulated entropy curves agree with Page's analytic formula
+S ≈ m ln2 − 2^m/(2·2^{n₀−m}) to two decimals for every size. Three things are
+established by this, and they are the computable content of P5 and §5.3:
+
+1. **The turnover is exactly where the two capacities cross** (m = n₀/2 in
+   every run), and the bound S ≤ min(m, n₀−m) ln2 is saturated and never
+   violated. The Page curve is the capacity-saturation curve of the two
+   channels. *This is Page's own 1993 argument, numerically reproduced here —
+   see the honesty note in §10.*
+2. **The two channels share, they do not duplicate**: for a pure global state
+   S(rad) = S(rem) to 10⁻¹⁶ at every step, and the purifier's mutual
+   information with the two channels obeys I(R:Rad) + I(R:Rem) = 2 n₀ ln2
+   exactly — information is transferred one-for-one, never copied. This is the
+   sharpest computable statement in the framework, and it is what blocks the
+   firewall.
+3. **The monotonic “thermal” curve is the ledger-blind model.** Running the
+   *same* dynamics with the initial black hole modelled as maximally mixed
+   (purified by a reference register the observer never sees) gives
+   S(rad)/ln2 = 1, 2, 3, 4, 5, 6 — monotonic, no turnover, Hawking's curve.
+   The only difference between the two runs is whether the initial ledger is
+   accounted for. The information paradox is therefore, at this level, a
+   bookkeeping choice, and the simulation shows precisely which one produces it.
+
+### 15.2 Quantised payout (test 2)
+
+Adopting the published one-bit-per-area-quantum spacing
+ΔA = 4 ln 2 ℓ_P² (Bagchi–Ghosh–Sen 2024), the capacities count whole quanta:
+
+- the Page time moves from n₀/2 to the first integer m with m ≥ n₀ − m, so the
+  largest possible misplacement is **half a quantum**, i.e. in time
+  **Δt/t = (3/4)/N** where N = A/ΔA is the number of area quanta;
+- for a Planck-mass hole (the endpoint of evaporation) N ≈ 18, so its Page
+  curve is a **tent of about eighteen steps** and its Page time is misplaced by
+  about 4 % — the staircase is not suppressed there;
+- for a solar-mass hole N ≈ 1.5 × 10⁷⁷ (Δt/t ≈ 5 × 10⁻⁷⁸), Sgr A* N ≈ 2.8 ×
+  10⁹⁰, M87* N ≈ 6.4 × 10⁹⁶: the effect is unobservably small, which is why
+  §9 puts the test in analog horizons;
+- for an analog horizon with R = 5–20 μm and healing length ξ = 0.3 μm,
+  N ≈ 1.3 × 10³–2 × 10⁴ quanta, so the last ten quanta occupy 0.8 %–0.02 % of
+  the lifetime — finite, non-negligible, and the honest place to look.
+
+### 15.3 Readout degeneracy, Conjecture R (test 3)
+
+The saturated-ball model of §5.6 was integrated numerically. As q → 1
+(“as r → 0”), the readout curvature diverges as K ∝ (1−q)⁻² — from 4 at
+q = 0.5 to 10¹² at q = 0.999999 — while every substrate invariant stays
+finite and bounded: total entropy S_max = 1, total entropy flux
+∫(dS/du)du = 1.000000, total “substrate length”
+∫√(g^E_uu) du = 1.999999 against an exact 2.0 (the 6 × 10⁻⁷ difference is the
+analytic tail beyond u = 30), and the cut's entropy saturates at S_max with no
+further refinement possible.
+
+For comparison, the classical Schwarzschild horizon behaves the same way and
+was computed alongside it: the Kretschmann scalar diverges as r⁻⁶ while the
+proper distance from the horizon to the centre is finite — numerically
+4.6351 × 10³ m against the exact π r_s/2 = 4.6391 × 10³ m for the Sun
+(ratio L/r_s = 1.5694 against π/2 = 1.5708, matching to 0.09 %). In both
+geometries a *coordinate* quantity diverges while a *proper* one does not. Conjecture R
+says the divergence belongs to the readout's Jacobian, and the framework does
+**not** claim to reproduce the exponent −6 until the map q(r) is derived
+(open problem O2).
+
+### 15.4 What the simulations do and do not establish
+
+They establish that Partitionism's central mechanism is **internally
+consistent, quantitatively computable, and reproduces the Page curve** in a
+controlled setting — and that its only unsuppressed quantitative signature
+(the staircase, the half-quantum Page-time shift) lives in the last ∼18 area
+quanta of a black hole's life, which for astrophysical holes is inaccessible
+and for analog horizons is in principle finite. They do not establish that the
+substrate exists. See §11 for the falsifiers.
+
+---
+
+## 16. References
 
 All entries are real and were verified during the writing of this document.
 
@@ -482,13 +640,29 @@ All entries are real and were verified during the writing of this document.
 55. D. Ellerman (2010). Rev. Symb. Logic 3, 287 — the logic of partitions; and arXiv:2208.00384 (2022), *Follow the Math!*.
 56. C. Rovelli (2022). arXiv:2201.00907 — the relational ontology of contemporary physics.
 57. S.-S. Lee (2020). JHEP 2020, 70 — quantum gravity from a Hilbert-space decomposition (emergent locality); arXiv:2212.14011.
-58. Constants: ℓ_P = 1.616255 × 10⁻³⁵ m; m_P = 2.176434 × 10⁻⁸ kg; t_P = 5.391247 × 10⁻⁴⁴ s (CODATA).
-59. R. Bousso (1999). JHEP 07 (1999) 004 — a covariant entropy conjecture (the covariant holographic bound).
-60. Numerical checks performed while writing (verifiable arithmetic): S/k_B = 4π G M²/(c ħ) = 1.05 × 10⁷⁷ for M = M☉; T_H = 6.2 × 10⁻⁸ K for M = M☉; t_ev ≈ 8.4 × 10⁻¹⁷ (M/kg)³ s, i.e. ≈ 2.1 × 10⁶⁷ yr for M = M☉; A/ΔA ≈ 6 × 10⁷⁶ for M = M☉ at γ ≈ 0.27; m_P c² = 1.96 × 10⁹ J; T_H = 2.7 K at M ≈ 4.5 × 10²² kg (0.61 lunar masses).
+58. R. Bousso (1999). JHEP 07 (1999) 004 — a covariant entropy conjecture (the covariant holographic bound).
+59. Numerical checks performed while writing (verifiable arithmetic): S/k_B = 4π G M²/(c ħ) = 1.05 × 10⁷⁷ for M = M☉; T_H = 6.2 × 10⁻⁸ K for M = M☉; t_ev ≈ 8.4 × 10⁻¹⁷ (M/kg)³ s, i.e. ≈ 2.1 × 10⁶⁷ yr for M = M☉; A/ΔA ≈ 6 × 10⁷⁶ for M = M☉ at γ ≈ 0.27; m_P c² = 1.96 × 10⁹ J; T_H = 2.7 K at M ≈ 4.5 × 10²² kg (0.61 lunar masses).
+60. V. F. Mukhanov (1986), JETP Lett. 44, 63 — “Are black holes quantized?” (the evenly spaced area spectrum).
+61. B. Bagchi, A. Ghosh, S. Sen (2024). Gen. Relativ. Gravit. 56, 108, arXiv:2408.02077 — Landauer's principle and black hole area quantization (ΔA = 4 ln 2 ℓ_P² gives one bit of entropy spacing).
+62. J. A. Neto & R. Thibes (2026). arXiv:2605.26386 (accepted, Phys. Lett. B) — generalized entropies and black hole area quantization from Landauer's principle.
+63. O. Dreyer (2002). arXiv:gr-qc/0211076 — quasinormal modes, the area spectrum, and black hole entropy.
+64. “On the value of the Immirzi parameter and the horizon entropy” (2020). arXiv:2001.03440 — fixes γ ≈ 0.274 in the SU(2) loop-quantum-gravity counting.
+65. arXiv:2407.08358 (2024) — quantized area of the Schwarzschild black hole, with Hawking-temperature modifications of O(m_P⁴/M³) and echo signatures.
+66. S. Datta & K. S. Phukon (2021). Phys. Rev. D 104, 124062 — imprint of black-hole area quantization and Hawking radiation on inspiraling binaries.
+67. Class. Quantum Grav. 39 (2022) 045007 — on black hole area quantization and echoes.
+68. arXiv:2002.05734 (2020) — a dynamical mechanism for the Page curve from quantum chaos (states Page's capacity result explicitly).
+69. K. Brádler & C. Adami (2015). arXiv:1505.02840 — one-shot decoupling and Page curves from a dynamical model for black hole evaporation.
+70. O. C. O. Dahlsten (2025). arXiv:2505.23011 — Page curve of average subsystem entropy (chapter in *Black Hole Information Paradox*, Springer).
+71. Quantum-computer simulations of the Page curve and entanglement dynamics of black holes, Nucl. Phys. (2025).
+72. A. Abutaleb (2026). arXiv:2601.05305 — microscopic unitarity and the quantization of black hole evaporation time.
+73. “Stratified black hole interiors and time-resolved Page curves for information recovery”, Int. J. Theor. Phys. (2025) — a multi-step Page curve from a stratified interior.
+74. “An algebraic description of the Page transition”, JHEP 04 (2026) 160.
+75. A. Averin (2026). arXiv:2603.29872 — microscopic origin of the Page curve.
+76. Constants used throughout (CODATA 2018 / IAU nominal): ℓ_P = 1.616255 × 10⁻³⁵ m; t_P = 5.391247 × 10⁻⁴⁴ s; m_P = 2.176434 × 10⁻⁸ kg; G = 6.67430 × 10⁻¹¹ m³kg⁻¹s⁻²; c = 299792458 m/s; ħ = 1.054571817 × 10⁻³⁴ J s; k_B = 1.380649 × 10⁻²³ J/K; M☉ = 1.98847 × 10³⁰ kg; M_Moon = 7.348 × 10²² kg.
 
 ---
 
-## 15. Glossary
+## 17. Glossary
 
 **Channel** — one side of the great bipartition that a black hole creates; the in-fall channel collects what collapses, the out-fall channel is the vacuum's displaced partnership.
 **Cut** — a bipartition of the substrate; the fundamental relational object.
