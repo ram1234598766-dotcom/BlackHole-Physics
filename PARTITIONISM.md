@@ -318,10 +318,11 @@ The out-fall entropy rises not smoothly but in steps of one logical qubit per ar
   ΔS_O = k_B ln 2 per ΔA = 8πγℓ_P², i.e. N_steps = A/ΔA over the hole's life.
 
 Magnitude: the Page time can move by at most **half a quantum**, which in time is
-Δt/t = (3/4)/N with N = A/ΔA the number of area quanta (§15.2).  For a
-Planck-mass hole N ≈ 18, so its Page curve is a tent of about eighteen steps and
-its Page time is misplaced by ~4 %; for a solar-mass hole N ≈ 1.5 × 10⁷⁷ and
-Δt/t ≈ 5 × 10⁻⁷⁸.  Adjacent to (and partially shared with) the
+Δt/t = 3/(2N) with N = A/ΔA the number of area quanta (§15.2) — the exponent
+3/2 appears because N ∝ M² while t ∝ M³.  For a Planck-mass hole
+N = 4π/ln 2 = 18.13 *exactly*, so its Page curve is a tent of about eighteen
+steps and its Page time is misplaced by 8.3 %; for a solar-mass hole
+N ≈ 1.5 × 10⁷⁷ and Δt/t ≈ 1 × 10⁻⁷⁷.  Adjacent to (and partially shared with) the
 quantized-area literature: Sahlmann (PRD 76 (2007) 104050) found that the LQG
 horizon entropy likewise increases in discrete steps as a function of area, and
 discrete/multi-step Page curves have since been proposed with other mechanisms
@@ -535,10 +536,11 @@ Adopting the published one-bit-per-area-quantum spacing
 
 - the Page time moves from n₀/2 to the first integer m with m ≥ n₀ − m, so the
   largest possible misplacement is **half a quantum**, i.e. in time
-  **Δt/t = (3/4)/N** where N = A/ΔA is the number of area quanta;
-- for a Planck-mass hole (the endpoint of evaporation) N ≈ 18, so its Page
-  curve is a **tent of about eighteen steps** and its Page time is misplaced by
-  about 4 % — the staircase is not suppressed there;
+  **Δt/t = 3/(2N)** where N = A/ΔA is the number of area quanta (N ∝ M² and
+  t ∝ M³);
+- for a Planck-mass hole (the endpoint of evaporation) N = 4π/ln2 = 18.13
+  exactly, so its Page curve is a **tent of about eighteen steps** and its Page
+  time is misplaced by 8.3 % — the staircase is not suppressed there;
 - for a solar-mass hole N ≈ 1.5 × 10⁷⁷ (Δt/t ≈ 5 × 10⁻⁷⁸), Sgr A* N ≈ 2.8 ×
   10⁹⁰, M87* N ≈ 6.4 × 10⁹⁶: the effect is unobservably small, which is why
   §9 puts the test in analog horizons;

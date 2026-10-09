@@ -94,17 +94,18 @@ Q2  granularity of the staircase
   because each step of the ladder is one area quantum.  Two consequences.
 
   N quanta   granularity 1/N   max Δm (quanta)    max Δt/t
-        10          1.00e-01              0.50   7.500e-02
-       100          1.00e-02              0.50   7.500e-03
-      1000          1.00e-03              0.50   7.500e-04
-     10000          1.00e-04              0.50   7.500e-05
-   1000000          1.00e-06              0.50   7.500e-07
-10000000000          1.00e-10              0.50   7.500e-11
-10000000000000000000000000000000000000000          1.00e-40              0.50   7.500e-41
-100000000000000000000000000000000000000000000000000000000000000000000000000000          1.00e-77              0.50   7.500e-78
+        10          1.00e-01              0.50   1.500e-01
+       100          1.00e-02              0.50   1.500e-02
+      1000          1.00e-03              0.50   1.500e-03
+     10000          1.00e-04              0.50   1.500e-04
+   1000000          1.00e-06              0.50   1.500e-06
+10000000000          1.00e-10              0.50   1.500e-10
+10000000000000000000000000000000000000000          1.00e-40              0.50   1.500e-40
+100000000000000000000000000000000000000000000000000000000000000000000000000000          1.00e-77              0.50   1.500e-77
 
   the largest possible misplacement of the Page time is half a quantum;
-  in time that is Δt/t = (3/4)/N, i.e. utterly negligible for any
+  since N = A/ΔA ∝ M² and t ∝ M³, that is Δt/t = 3/(2N) in time,
+  which is utterly negligible for any
   astrophysical black hole and finite for the small ones.
 
 Q2b the shape of the ladder for a hole with only a few quanta
@@ -122,16 +123,16 @@ Q2b the shape of the ladder for a hole with only a few quanta
 Q3  how many quanta do real systems have, and how big is the shift
 ------------------------------------------------------------------------
 object                              mass (kg)    N quanta        Δt/t
-solar-mass black hole               1.988e+30   1.513e+77   4.956e-78
-Sgr A* (4.3e6 M☉)                   8.550e+36   2.798e+90   2.680e-91
-M87* (6.5e9 M☉)                     1.293e+40   6.394e+96   1.173e-97
-primordial BH, 10^12 kg             1.000e+12   3.827e+40   1.960e-41
-Planck mass                         2.176e-08   1.813e+01   4.137e-02
+solar-mass black hole               1.988e+30   1.513e+77   9.912e-78
+Sgr A* (4.3e6 M☉)                   8.550e+36   2.798e+90   5.361e-91
+M87* (6.5e9 M☉)                     1.293e+40   6.394e+96   2.346e-97
+primordial BH, 10^12 kg             1.000e+12   3.827e+40   3.919e-41
+Planck mass                         2.176e-08   1.813e+01   8.274e-02
 
-  a Planck-mass hole - the endpoint of evaporation - carries about 18
-  area quanta, so its Page curve is a tent of roughly eighteen steps
-  and its Page time is misplaced by about 4%.  For any astrophysical
-  black hole the same quantity is 1e-78.
+  a Planck-mass hole - the endpoint of evaporation - carries exactly
+  N = 4 pi / ln 2 = 18.13 area quanta, so its Page curve is a tent of
+  about eighteen steps and its Page time is misplaced by 3/(2N) = 8%.
+  For any astrophysical black hole the same quantity is ~1e-77.
 
 Q4  analog horizons - the size of the last quantised stage
 ------------------------------------------------------------------------

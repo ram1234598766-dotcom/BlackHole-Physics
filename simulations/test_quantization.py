@@ -88,12 +88,15 @@ def run_tests():
     p(f"{'N quanta':>10}{'granularity 1/N':>18}{'max Δm (quanta)':>18}"
       f"{'max Δt/t':>12}")
     for n0 in (10, 100, 1000, 10 ** 4, 10 ** 6, 10 ** 10, 10 ** 40, 10 ** 77):
-        # t ∝ M³ and M ∝ N  =>  d(ln t)/d(ln N) = 3/2
-        dt_over_t = 1.5 * (0.5 / n0)
+        # N = A/ΔA ∝ M², so M ∝ N^(1/2) and t ∝ M³ ∝ N^(3/2).
+        # A half-quantum misplacement of the Page time is a relative shift
+        # of 1/N in the remaining mass, hence Δt/t = (3/2)/N.
+        dt_over_t = 1.5 / n0
         p(f"{n0:>10}{1.0/n0:18.2e}{0.5:18.2f}{dt_over_t:12.3e}")
     p("")
     p("  the largest possible misplacement of the Page time is half a quantum;")
-    p("  in time that is Δt/t = (3/4)/N, i.e. utterly negligible for any")
+    p("  since N = A/ΔA ∝ M² and t ∝ M³, that is Δt/t = 3/(2N) in time,")
+    p("  which is utterly negligible for any")
     p("  astrophysical black hole and finite for the small ones.")
     p("")
     p("Q2b the shape of the ladder for a hole with only a few quanta")
@@ -120,13 +123,15 @@ def run_tests():
     ]
     for name, mass in cases:
         n = area_quanta(mass)
-        dt = 1.5 * (0.5 / n) if n > 1 else float("nan")
+        # N = A/ΔA ∝ M² and t ∝ M³, so a half-quantum misplacement of the
+        # Page time is Δt/t = (3/2)/N
+        dt = 1.5 / n if n > 1 else float("nan")
         p(f"{name:<34}{mass:11.3e}{n:12.3e}{dt:12.3e}")
     p("")
-    p("  a Planck-mass hole - the endpoint of evaporation - carries about 18")
-    p("  area quanta, so its Page curve is a tent of roughly eighteen steps")
-    p("  and its Page time is misplaced by about 4%.  For any astrophysical")
-    p("  black hole the same quantity is 1e-78.")
+    p("  a Planck-mass hole - the endpoint of evaporation - carries exactly")
+    p("  N = 4 pi / ln 2 = 18.13 area quanta, so its Page curve is a tent of")
+    p("  about eighteen steps and its Page time is misplaced by 3/(2N) = 8%.")
+    p("  For any astrophysical black hole the same quantity is ~1e-77.")
     p("")
 
     # ---- Q4: the analog horizon, where the test is actually feasible ---
